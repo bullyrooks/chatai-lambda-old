@@ -3,11 +3,11 @@ import os
 
 import aws_cdk as cdk
 
-from python_cdk_helloworld.python_cdk_helloworld_stack import PythonCdkHelloworldStack
+from chatailambda.chatai_lambda_stack import ChatAILambdaStack
 
 
 app = cdk.App()
-PythonCdkHelloworldStack(app, "PythonCdkHelloworldStack",
+ChatAILambdaStack(app, "ChatAILambdaStack",
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,
     # but a single synthesized template can be deployed anywhere.
