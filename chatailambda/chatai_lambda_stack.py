@@ -55,13 +55,9 @@ class ChatAILambdaStack(Stack):
         development_usage_plan = UsagePlan(self,
                                            "Dev Usage Plan",
                                            throttle=ThrottleSettings(
-                                               rate_limit=100 / 3600,  # requests per second
-                                               burst_limit=10  # maximum number of requests in a burst
-                                           ),
-                                           quota={
-                                               "limit": 100,  # number of requests
-                                               "period": apigateway.Period.HOUR  # time period
-                                           }
+                                               rate_limit=10,  # requests per second
+                                               burst_limit=2  # maximum number of requests in a burst
+                                           )
                                            )
 
         # Associate the API key with the usage plan
