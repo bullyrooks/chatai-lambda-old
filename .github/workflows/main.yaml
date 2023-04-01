@@ -1,0 +1,115 @@
+name: Main Build and Deploy
+
+on:
+
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        type: string
+        description: Image tag to use
+        required: true
+      environment:
+        type: choice
+        description: Environment to deploy to
+        options:
+          - brianrook-aws
+          - devsandbox
+        required: true
+
+jobs:
+
+  version:
+    name: Get the version
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${{github.event.inputs.image_tag}}
+    outputs:
+      image_tag: ${{ steps.set-version.outputs.image_tag }}
+    #permissions to write back to github repo
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Get Release Version
+        id: semantic
+        uses: docker://ghcr.io/codfish/semantic-release-action:v2
+        with:
+          additional_packages: |
+            ['@semantic-release/changelog']
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set Returned Version
+        id: set-version
+        run: |
+          echo "${RELEASE_VERSION}"
+          echo "image_tag=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
+          
+  
+
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+    environment: ${{github.event.inputs.environment || 'brianrook-aws'}}
+    needs: [version]
+    env:
+      IMAGE_TAG: ${{needs.version.outputs.image_tag}}
+      DD_API_KEY: ${{ secrets.DD_API_KEY }}
+
+    steps:
+
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_DEFAULT_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ github.event.repository.name }}
+        run: |
+          cd python_cdk_helloworld/HelloWorldLambda
+          docker build --build-arg DD_KEY=$DD_API_KEY --build-arg APP_VERSION=$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY --all-tags
+          
+
+  deploy:
+    name: Deploy via CDK
+    runs-on: ubuntu-latest
+    environment: ${{github.event.inputs.environment || 'brianrook-aws' }}
+    needs: [build, version]
+    env:
+      IMAGE_TAG: ${{needs.version.outputs.image_tag || github.event.inputs.image_tag}}
+
+    steps:
+      - name: Echo image tag
+        run: |
+          echo "image tag: $IMAGE_TAG"
+
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: cdk deploy
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'deploy'
+          cdk_stack: 'PythonCdkHelloworldStack'
+          cdk_args: "--require-approval never"
+          actions_comment: false
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ vars.AWS_DEFAULT_REGION }}
