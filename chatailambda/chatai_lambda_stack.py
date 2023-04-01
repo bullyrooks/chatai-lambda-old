@@ -54,9 +54,6 @@ class ChatAILambdaStack(Stack):
         # Create a usage plan
         development_usage_plan = UsagePlan(self,
                                            "Dev Usage Plan",
-                                           api_stages=[
-                                               UsagePlanProps(api=api, stage=api.deployment_stage)
-                                           ],
                                            throttle=ThrottleSettings(
                                                rate_limit=100 / 3600,  # requests per second
                                                burst_limit=10  # maximum number of requests in a burst
