@@ -40,7 +40,7 @@ jobs:
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'deploy'
-          cdk_stack: 'PythonCdkHelloworldStack'
+          cdk_stack: 'ChatAILambdaStack'
           cdk_args: "--require-approval never"
           actions_comment: false
         env:
