@@ -9,7 +9,7 @@ app = App()
 # Set up AWS Lambda client
 lambda_client = boto3.client('lambda', region_name=os.environ["AWS_REGION"])
 # API key for the "Hello, World!" Lambda function
-api_key = os.environ["API_KEY"]
+api_key = os.environ["LAMBDA_API_KEY"]
 
 @app.event("app_mention")
 async def command_handler(body, say):

@@ -89,4 +89,4 @@ class ChatAILambdaStack(Stack):
             request_templates={"application/json": '{ "statusCode": "200" }'})
 
         # Add a method to the API Gateway with API key requirement
-        slack_api.root.add_method("GET", slack_integration)
+        slack_api.root.add_method("POST", slack_integration)
