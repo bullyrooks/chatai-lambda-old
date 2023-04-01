@@ -3,8 +3,15 @@ import os
 from aws_cdk import (
     # Duration,
     Stack,
-    aws_lambda as _lambda )
-from aws_cdk.aws_apigateway import ApiKey, UsagePlan, RestApi, UsagePlanProps, ThrottleSettings, LambdaIntegration
+    aws_lambda as _lambda,
+    aws_apigateway as apigateway)
+from aws_cdk.aws_apigateway import (
+    ApiKey,
+    UsagePlan,
+    RestApi,
+    UsagePlanProps,
+    ThrottleSettings,
+    LambdaIntegration)
 from aws_cdk.aws_ecr import Repository
 from constructs import Construct
 
@@ -30,11 +37,11 @@ class ChatAILambdaStack(Stack):
         )
 
         api = RestApi(self, "chatai-lambda-gw",
-                                 rest_api_name="ChatAI Service",
-                                 description="This service fronts chatai.",
-                                 deploy_options={
-                                     "api_key_source_type": "HEADER"
-                                 })
+                      rest_api_name="ChatAI Service",
+                      description="This service fronts chatai.",
+                      deploy_options={
+                          "api_key_source_type": "HEADER"
+                      })
 
         chatai_integration = LambdaIntegration(
             self.chatai_lambda,
