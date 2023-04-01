@@ -39,9 +39,7 @@ class ChatAILambdaStack(Stack):
         api = RestApi(self, "chatai-lambda-gw",
                       rest_api_name="ChatAI Service",
                       description="This service fronts chatai.",
-                      deploy_options={
-                          "api_key_source_type": "HEADER"
-                      })
+                      api_key_source_type=apigateway.ApiKeySourceType.HEADER)
 
         chatai_integration = LambdaIntegration(
             self.chatai_lambda,
