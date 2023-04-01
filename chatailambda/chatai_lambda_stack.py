@@ -85,7 +85,7 @@ class ChatAILambdaStack(Stack):
                             description="This service handles slack requests")
 
         slack_integration = LambdaIntegration(
-            self.slackapi,
+            self.slack_lambda,
             request_templates={"application/json": '{ "statusCode": "200" }'})
 
         # Add a method to the API Gateway with API key requirement
