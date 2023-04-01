@@ -57,3 +57,14 @@ command.
 
 Enjoy!
 
+---
+# Setup Instructions
+## Create an ECR Repository
+Create an ECR repository that matches the repository being used in CDK
+## Create the environment variables
+Create actions secrets for the following keys
+
+AWS Access
+ * `AWS_ACCESS_KEY_ID`
+ * `AWS_SECRET_ACCESS_KEY`
+ * `GH_TOKEN`
