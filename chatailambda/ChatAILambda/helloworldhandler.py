@@ -3,7 +3,7 @@ import logging.config
 
 logging.config.fileConfig('logging.conf')
 
-from chatai.chat import Chat
+from helloworld.chat import Chat
 
 
 logger = logging.getLogger(__name__)
