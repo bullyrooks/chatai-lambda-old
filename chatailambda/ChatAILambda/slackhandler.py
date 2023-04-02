@@ -1,3 +1,4 @@
+import asyncio
 import logging.config
 import json
 
@@ -17,7 +18,9 @@ def handler(event, context):
 
     # Call the command_handler function from the slack_ai_bot module
     logger.info("calling slack handler")
-    response = command_handler(text, channel_id)
+    loop = asyncio.get_event_loop()
+    response = loop.run_until_complete(command_handler(text, say))
+
     logger.info("slack handler response: %s", response)
 
     # Return the response as a JSON object

@@ -68,3 +68,5 @@ async def command_handler(body, channelId):
 
     # Send the response back to the Slack channel
     await say(channelId, response_payload['response'])
+
+    return response_payload

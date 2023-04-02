@@ -16,7 +16,7 @@ from aws_cdk.aws_ecr import Repository
 from constructs import Construct
 from aws_cdk import aws_secretsmanager as secretsmanager
 from aws_cdk import aws_iam as iam
-
+from aws_cdk import aws_kms as kms
 
 class ChatAILambdaStack(Stack):
 
@@ -56,6 +56,18 @@ class ChatAILambdaStack(Stack):
         # Create an API key
         test_key = ApiKey(self, "DEV Test Key", api_key_name="devTestKey", enabled=True)
 
+        # Create a KMS key
+        ssm_key = kms.Key.from_key_arn(self, "DefaultSSMKey", key_arn="arn:aws:kms:us-west-2:108452827623:key/c4cc2c51-c954-4f6c-a383-5e75e6dc8cce")
+
+        # store the key in SSM after creation
+        ssm.SecureStringParameter(
+            self,
+            "ApiKeySecureParameter",
+            parameter_name="/prod/chatai/lambda.api.key",
+            string_value=test_key.key_value,
+            description="API key for devTestKey as a secure string",
+            encryption_key=ssm_key
+        )
         # Create a usage plan
         development_usage_plan = UsagePlan(self,
                                            "Dev Usage Plan",
