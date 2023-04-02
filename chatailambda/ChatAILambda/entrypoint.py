@@ -9,6 +9,8 @@ logger = logging.getLogger(__name__)
 
 def handler(event, context):
     logger.info("in entrypoint, event: %s", event)
+    if 'body' in event :
+        logger.info("slack body: %s", event['body'])
     handler_module_name, handler_function_name = os.environ['HANDLER'].rsplit('.', 1)
     logger.info("handler: %s, %s", handler_module_name, handler_function_name)
     handler_module = importlib.import_module(handler_module_name)
