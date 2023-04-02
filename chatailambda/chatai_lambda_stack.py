@@ -14,6 +14,7 @@ from aws_cdk.aws_apigateway import (
     LambdaIntegration)
 from aws_cdk.aws_ecr import Repository
 from constructs import Construct
+from aws_cdk import aws_secretsmanager as secretsmanager
 
 
 class ChatAILambdaStack(Stack):
@@ -73,8 +74,8 @@ class ChatAILambdaStack(Stack):
         ## Slack lambda
 
         # get the api key needed to talk to the lambda
-        lambda_api_key = ssm.StringParameter.from_string_parameter_attributes(
-            self, "LambdaAPIKey", parameter_name="/prod/chatai/lambda.api.key"
+        lambda_api_key = secretsmanager.Secret.from_secret_complete_arn(
+            self, "LambdaApiKey", "arn:aws:secretsmanager:us-west-2:108452827623:secret:prod/chat/lambda.api.key-XrRQPL"
         )
 
         self.slack_lambda = _lambda.DockerImageFunction(
@@ -84,7 +85,7 @@ class ChatAILambdaStack(Stack):
             code=self.ecr_image,
             environment={
                 'HANDLER': 'slackhandler.handler',
-                "LAMBDA_API_KEY": lambda_api_key.string_value,
+                "LAMBDA_API_KEY": lambda_api_key.secret_value,
             }
         )
 
