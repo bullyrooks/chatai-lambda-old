@@ -73,11 +73,6 @@ class ChatAILambdaStack(Stack):
 
         ## Slack lambda
 
-        # get the api key needed to talk to the lambda
-        lambda_api_key = secretsmanager.Secret.from_secret_complete_arn(
-            self, "LambdaApiKey", "arn:aws:secretsmanager:us-west-2:108452827623:secret:prod/chat/lambda.api.key-XrRQPL"
-        )
-
         self.slack_lambda = _lambda.DockerImageFunction(
             scope=self,
             id="slack-lambda",
@@ -85,7 +80,6 @@ class ChatAILambdaStack(Stack):
             code=self.ecr_image,
             environment={
                 'HANDLER': 'slackhandler.handler',
-                "LAMBDA_API_KEY": lambda_api_key.secret_value,
             }
         )
 
