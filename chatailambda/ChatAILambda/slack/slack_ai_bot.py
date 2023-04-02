@@ -34,11 +34,6 @@ app_token = apptokenresponse["Parameter"]["Value"]
 
 slack_client = WebClient(token=app_token)
 
-def say(channel, message):
-    try:
-        response = slack_client.chat_postMessage(channel=channel, text=message)
-    except SlackApiError as e:
-        print(f"Error posting message: {e}")
 
 app = App(token=bot_token)
 
@@ -76,3 +71,9 @@ async def command_handler(body, say):
     await say(channel_id, response_payload['response'])
 
     return response_payload
+
+def say(channel, message):
+    try:
+        response = slack_client.chat_postMessage(channel=channel, text=message)
+    except SlackApiError as e:
+        print(f"Error posting message: {e}")

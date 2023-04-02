@@ -7,4 +7,6 @@ plugins:
   - "@semantic-release/release-notes-generator"
   - "@semantic-release/changelog"
   - "@semantic-release/github"
+    - failTitle: false
+      successComment: false
 

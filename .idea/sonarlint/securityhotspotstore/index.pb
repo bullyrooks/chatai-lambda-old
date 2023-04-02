@@ -1,6 +1,4 @@
 
-V
-&chatailambda/ChatAILambda/logging.conf,1\4\14e67367c98a5a4a2129ab699d0b68d538a1d205
 H
 chatailambda/__init__.py,e\c\ecf384df69949c2f73ab9c659cc3d2b6a6d99f95
 V
