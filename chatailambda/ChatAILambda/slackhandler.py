@@ -6,7 +6,6 @@ logging.config.fileConfig('logging.conf')
 from slack.slack_ai_bot import command_handler
 
 
-
 logger = logging.getLogger(__name__)
 
 
