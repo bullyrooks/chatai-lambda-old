@@ -87,6 +87,15 @@ class ChatAILambdaStack(Stack):
         self.slack_lambda.role.add_managed_policy(
             iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMReadOnlyAccess")
         )
+        ssm_policy_statement = iam.PolicyStatement(
+            actions=["ssm:GetParameter"],
+            resources=["arn:aws:ssm:us-west-2:108452827623:parameter/prod/chatai/lambda.api.key",
+                       "arn:aws:ssm:us-west-2:108452827623:parameter/prod/chatai/slack.app.token",
+                       "arn:aws:ssm:us-west-2:108452827623:parameter/prod/chatai/slack.bot.token",
+                       ],
+            effect=iam.Effect.ALLOW
+        )
+        self.slack_lambda.role.add_to_policy(ssm_policy_statement)
 
         slack_api = RestApi(self, "slack-lambda-gw",
                             rest_api_name="Slack Service",
