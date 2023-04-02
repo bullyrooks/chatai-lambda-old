@@ -43,9 +43,11 @@ def say(channel, message):
 app = App(token=bot_token)
 
 @app.event("app_mention")
-async def command_handler(body, channelId):
+async def command_handler(body, say):
     text = body['event']['text']
     user = body['event']['user']
+    # Get the input text from the event
+    channel_id = body['event']['channel_id']
 
     # Ignore messages from the bot itself
     if user == 'helloworld':
@@ -67,6 +69,6 @@ async def command_handler(body, channelId):
     logger.info("got response: %s", response_payload)
 
     # Send the response back to the Slack channel
-    await say(channelId, response_payload['response'])
+    await say(channel_id, response_payload['response'])
 
     return response_payload
