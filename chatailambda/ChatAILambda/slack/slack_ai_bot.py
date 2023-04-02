@@ -35,7 +35,7 @@ app_token = apptokenresponse["Parameter"]["Value"]
 slack_client = WebClient(token=app_token)
 
 
-app = App(token=bot_token)
+app = App(token=bot_token, logger=logger)
 
 @app.event("app_mention")
 async def command_handler(body, say):
