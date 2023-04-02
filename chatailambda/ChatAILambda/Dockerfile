@@ -11,7 +11,5 @@ COPY logging.conf ${LAMBDA_TASK_ROOT}
 COPY helloworld ${LAMBDA_TASK_ROOT}/helloworld
 COPY slack ${LAMBDA_TASK_ROOT}/slack
 
-ARG DD_KEY
-ARG APP_VERSION
 
 CMD ["entrypoint.handler"]

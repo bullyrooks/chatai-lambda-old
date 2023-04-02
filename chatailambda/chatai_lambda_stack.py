@@ -5,6 +5,7 @@ from aws_cdk import (
     Stack,
     aws_lambda as _lambda,
     aws_apigateway as apigateway)
+from aws_cdk import aws_ssm as ssm
 from aws_cdk.aws_apigateway import (
     ApiKey,
     UsagePlan,
@@ -39,9 +40,9 @@ class ChatAILambdaStack(Stack):
         )
 
         chatai_api = RestApi(self, "chatai-lambda-gw",
-                      rest_api_name="ChatAI Service",
-                      description="This service fronts chatai.",
-                      api_key_source_type=apigateway.ApiKeySourceType.HEADER)
+                             rest_api_name="ChatAI Service",
+                             description="This service fronts chatai.",
+                             api_key_source_type=apigateway.ApiKeySourceType.HEADER)
 
         chatai_integration = LambdaIntegration(
             self.chatai_lambda,
@@ -70,13 +71,21 @@ class ChatAILambdaStack(Stack):
         development_usage_plan.add_api_key(test_key)
 
         ## Slack lambda
+
+        # get the api key needed to talk to the lambda
+        lambda_api_key = ssm.StringParameter.from_string_parameter_attributes(
+            self, "LambdaAPIKey", parameter_name="/prod/chatai/lambda.api.key"
+        )
+
         self.slack_lambda = _lambda.DockerImageFunction(
             scope=self,
             id="slack-lambda",
             function_name="slack-bot",
             code=self.ecr_image,
             environment={
-                'HANDLER': 'slackhandler.handler'
+                'HANDLER': 'slackhandler.handler',
+                "AWS_REGION": "us-west-2",
+                "LAMBDA_API_KEY": lambda_api_key.string_value,
             }
         )
 
