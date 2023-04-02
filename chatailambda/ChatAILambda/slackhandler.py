@@ -16,7 +16,9 @@ def handler(event, context):
     text = event.get('text', '')
 
     # Call the command_handler function from the slack_ai_bot module
+    logger.info("calling slack handler")
     response = command_handler(text)
+    logger.info("slack handler response: %s", response)
 
     # Return the response as a JSON object
     return {

@@ -1,9 +1,15 @@
 import os
 import importlib
 import json
+import logging.config
+
+logging.config.fileConfig('logging.conf')
+logger = logging.getLogger(__name__)
 
 def handler(event, context):
+    logger.info("in entrypoint")
     handler_module_name, handler_function_name = os.environ['HANDLER'].rsplit('.', 1)
+    logger.info("handler: %s", handler_module_name)
     handler_module = importlib.import_module(handler_module_name)
     handler_function = getattr(handler_module, handler_function_name)
 

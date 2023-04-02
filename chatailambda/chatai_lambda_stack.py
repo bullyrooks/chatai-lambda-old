@@ -76,7 +76,7 @@ class ChatAILambdaStack(Stack):
         self.slack_lambda = _lambda.DockerImageFunction(
             scope=self,
             id="slack-lambda",
-            function_name="slack-bot",
+            function_name="slack-lambda",
             code=self.ecr_image,
             environment={
                 'HANDLER': 'slackhandler.handler',
