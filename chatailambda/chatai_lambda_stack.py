@@ -84,7 +84,6 @@ class ChatAILambdaStack(Stack):
             code=self.ecr_image,
             environment={
                 'HANDLER': 'slackhandler.handler',
-                "AWS_REGION": "us-west-2",
                 "LAMBDA_API_KEY": lambda_api_key.string_value,
             }
         )
