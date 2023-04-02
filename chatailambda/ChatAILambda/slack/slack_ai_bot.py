@@ -38,16 +38,13 @@ slack_client = WebClient(token=app_token)
 app = App(token=bot_token, logger=logger)
 
 @app.event("app_mention")
-async def command_handler(body, say):
-    logger.info("body in: %s", body)
-    if 'event' in body:
-        text = body['event']['text']
-        user = body['event']['user']
-        # Get the input text from the event
-        channel_id = body['event']['channel_id']
+async def command_handler(event, say):
+    logger.info("event in: %s", event)
+    text = event['text']
+    user = event['user']
+    # Get the input text from the event
+    channel_id = event['channel_id']
 
-    else:
-        return "{failed}"
     # Ignore messages from the bot itself
     if user == 'helloworld':
         return
