@@ -105,6 +105,7 @@ class ChatAILambdaStack(Stack):
             effect=iam.Effect.ALLOW
         )
         self.slack_lambda.role.add_to_policy(ssm_policy_statement)
+        self.chatai_lambda.role.add_to_policy(ssm_policy_statement)
 
         slack_api = RestApi(self, "slack-lambda-gw",
                             rest_api_name="Slack Service",

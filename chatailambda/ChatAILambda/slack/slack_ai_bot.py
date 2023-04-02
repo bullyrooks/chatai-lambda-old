@@ -44,11 +44,15 @@ app = App(token=bot_token)
 
 @app.event("app_mention")
 async def command_handler(body, say):
-    text = body['event']['text']
-    user = body['event']['user']
-    # Get the input text from the event
-    channel_id = body['event']['channel_id']
+    logger.info("body in: %s", body)
+    if 'event' in body:
+        text = body['event']['text']
+        user = body['event']['user']
+        # Get the input text from the event
+        channel_id = body['event']['channel_id']
 
+    else:
+        return "{failed}"
     # Ignore messages from the bot itself
     if user == 'helloworld':
         return

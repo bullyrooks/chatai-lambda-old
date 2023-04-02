@@ -18,5 +18,3 @@ M
 0chatailambda/ChatAILambda/helloworld/__init__.py,1\6\1669fc94cec976ee0319bac37fc09f4bba4f6ffa
 6
 app.py,1\3\13cce7fd076299c81b4986166f3d822791c9490e
-\
-,chatailambda/ChatAILambda/helloworld/main.py,0\0\00b9051352d5e768680764fb768c4b14bc8cc4c8
