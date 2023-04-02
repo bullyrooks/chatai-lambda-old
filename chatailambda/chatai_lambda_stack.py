@@ -57,14 +57,14 @@ class ChatAILambdaStack(Stack):
         test_key = ApiKey(self, "DEV Test Key", api_key_name="devTestKey", enabled=True)
 
         # # store the key in SSM after creation
-        ssm.StringParameter(
-            self,
-            "ApiKeySecureParameter",
-            parameter_name="/prod/chatai/lambda.api.key",
-            string_value=test_key.key_value,
-            description="API key for devTestKey as a secure string",
-            type=ssm.ParameterType.SECURE_STRING,
-        )
+        # ssm.StringParameter(
+        #     self,
+        #     "ApiKeySecureParameter",
+        #     parameter_name="/prod/chatai/lambda.api.key",
+        #     string_value=test_key.,
+        #     description="API key for devTestKey as a secure string",
+        #     type=ssm.ParameterType.SECURE_STRING,
+        # )
         # Create a usage plan
         development_usage_plan = UsagePlan(self,
                                            "Dev Usage Plan",
