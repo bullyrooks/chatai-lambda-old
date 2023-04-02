@@ -8,8 +8,6 @@ V
 :
 
 source.bat,c\5\c5b57cd2ce147b74c0a20d32e74b1bc864b7c1f9
-9
-	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 D
 requirements-dev.txt,f\4\f4fb69164b97e1b6f17984369c9c382573a3f919
 8

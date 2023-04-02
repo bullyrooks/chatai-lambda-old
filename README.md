@@ -68,3 +68,9 @@ AWS Access
  * `AWS_ACCESS_KEY_ID`
  * `AWS_SECRET_ACCESS_KEY`
  * `GH_TOKEN`
+
+## Add parameter store entries (secure string)
+ * /prod/chatai/chatai.api.key
+ * /prod/chatai/lambda.api.key
+ * /prod/chatai/slack.app.token
+ * /prod/chatai/slack.bot.token
