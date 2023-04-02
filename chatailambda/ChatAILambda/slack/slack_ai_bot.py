@@ -4,7 +4,8 @@ import boto3
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import logging.config
-
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 logger = logging.getLogger(__name__)
 
@@ -31,10 +32,18 @@ apptokenresponse = ssm.get_parameter(
 )
 app_token = apptokenresponse["Parameter"]["Value"]
 
+slack_client = WebClient(token=app_token)
+
+def say(channel, message):
+    try:
+        response = slack_client.chat_postMessage(channel=channel, text=message)
+    except SlackApiError as e:
+        print(f"Error posting message: {e}")
+
 app = App(token=bot_token)
 
 @app.event("app_mention")
-async def command_handler(body, say):
+async def command_handler(body, channelId):
     text = body['event']['text']
     user = body['event']['user']
 
@@ -58,4 +67,4 @@ async def command_handler(body, say):
     logger.info("got response: %s", response_payload)
 
     # Send the response back to the Slack channel
-    await say(response_payload['response'])
+    await say(channelId, response_payload['response'])
