@@ -15,6 +15,7 @@ from aws_cdk.aws_apigateway import (
 from aws_cdk.aws_ecr import Repository
 from constructs import Construct
 from aws_cdk import aws_secretsmanager as secretsmanager
+from aws_cdk import aws_iam as iam
 
 
 class ChatAILambdaStack(Stack):
@@ -81,6 +82,10 @@ class ChatAILambdaStack(Stack):
             environment={
                 'HANDLER': 'slackhandler.handler',
             }
+        )
+        # Assuming your Lambda function is defined as self.slack_lambda
+        self.slack_lambda.role.add_managed_policy(
+            iam.ManagedPolicy.from_aws_managed_policy_name("AmazonSSMReadOnlyAccess")
         )
 
         slack_api = RestApi(self, "slack-lambda-gw",
