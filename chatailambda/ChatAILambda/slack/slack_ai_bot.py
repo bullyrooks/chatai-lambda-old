@@ -13,20 +13,24 @@ logger = logging.getLogger(__name__)
 lambda_client = boto3.client('lambda', region_name=os.environ["AWS_REGION"])
 # API key for the "Hello, World!" Lambda function
 ssm = boto3.client('ssm', region_name=os.environ["AWS_REGION"])
-api_key = ssm.get_parameter(
+apikeyresponse = ssm.get_parameter(
     Name='/prod/chatai/lambda.api.key',
     WithDecryption=True
 )
+api_key = apikeyresponse["Parameter"]["Value"]
 
-bot_token = ssm.get_parameter(
+bottokenresponse = ssm.get_parameter(
     Name='/prod/chatai/slack.bot.token',
     WithDecryption=True
 )
+bot_token = bottokenresponse["Parameter"]["Value"]
 
-app_token = ssm.get_parameter(
+apptokenresponse = ssm.get_parameter(
     Name='/prod/chatai/slack.app.token',
     WithDecryption=True
 )
+app_token = apptokenresponse["Parameter"]["Value"]
+
 app = App(token=bot_token)
 
 @app.event("app_mention")
