@@ -5,7 +5,6 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import logging.config
 
-app = App()
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +17,17 @@ api_key = ssm.get_parameter(
     Name='/prod/chatai/lambda.api.key',
     WithDecryption=True
 )
+
+bot_token = ssm.get_parameter(
+    Name='/prod/chatai/slack.bot.token',
+    WithDecryption=True
+)
+
+app_token = ssm.get_parameter(
+    Name='/prod/chatai/slack.app.token',
+    WithDecryption=True
+)
+app = App(token=bot_token)
 
 @app.event("app_mention")
 async def command_handler(body, say):
